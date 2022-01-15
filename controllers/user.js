@@ -1,8 +1,15 @@
 const User = require("./../models/user");
-
+const bcrypt = require("bcryptjs");
 const createUser = async (req, res) => {
   try {
-    const newUser = await User.create(req.body);
+    const newUser = await User.create({
+      firstName: req.body.firstName,
+      lastName: req.body.lastName,
+      userName: req.body.userName,
+      password: bcrypt.hashSync(req.body.password, 8),
+      email: req.body.email,
+      phone: req.body.phone,
+    });
 
     res.status(201).json({
       status: "success",
@@ -15,6 +22,7 @@ const createUser = async (req, res) => {
       sattus: "fail",
       message: err,
     });
+    console.log(err);
   }
 };
 
